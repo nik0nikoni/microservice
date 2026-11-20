@@ -6,9 +6,12 @@ RATE_LIMIT_PER_MINUTE = int(os.getenv("RATE_LIMIT_PER_MINUTE", "60"))
 
 AUTH_SERVICE_URL = os.getenv("AUTH_SERVICE_URL", "http://localhost:8001")
 
-# префикс пути -> адрес сервиса; новые сервисы добавляются сюда
+
+USER_SERVICE_URL = os.getenv("USER_SERVICE_URL", "http://localhost:8002")
+
 ROUTES = [
     ("/api/auth", AUTH_SERVICE_URL),
+    ("/api/users", USER_SERVICE_URL),
 ]
 
 # пути, которые доступны без токена

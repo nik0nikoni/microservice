@@ -33,8 +33,6 @@ services:
       JWT_SECRET: ${JWT_SECRET}
     volumes:
       - auth_data:/app/data
-    ports:
-      - "8001:8000"   # временно, для проверки; потом наружу будет только gateway
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 10s

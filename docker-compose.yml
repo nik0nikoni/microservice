@@ -46,6 +46,7 @@ services:
       AUTH_SERVICE_URL: http://auth-service:8000
       USER_SERVICE_URL: http://user-service:8000
       PROJECT_SERVICE_URL: http://project-service:8000
+      TASK_SERVICE_URL: http://task-service:8000
     ports:
       - "8000:8000"
     depends_on:
@@ -54,6 +55,8 @@ services:
       user-service:
         condition: service_healthy
       project-service:
+        condition: service_healthy
+      task-service:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
@@ -86,6 +89,25 @@ services:
       timeout: 5s
       retries: 5
 
+
+  task-service:
+    build: ./services/task-service
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      RABBITMQ_URL: amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672/
+      PROJECT_SERVICE_URL: http://project-service:8000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      project-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:

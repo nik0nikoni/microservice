@@ -8,10 +8,12 @@ AUTH_SERVICE_URL = os.getenv("AUTH_SERVICE_URL", "http://localhost:8001")
 
 
 USER_SERVICE_URL = os.getenv("USER_SERVICE_URL", "http://localhost:8002")
+PROJECT_SERVICE_URL = os.getenv("PROJECT_SERVICE_URL", "http://localhost:8003")
 
 ROUTES = [
     ("/api/auth", AUTH_SERVICE_URL),
     ("/api/users", USER_SERVICE_URL),
+    ("/api/projects", PROJECT_SERVICE_URL),
 ]
 
 # пути, которые доступны без токена

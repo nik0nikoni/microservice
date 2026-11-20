@@ -45,12 +45,15 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       AUTH_SERVICE_URL: http://auth-service:8000
       USER_SERVICE_URL: http://user-service:8000
+      PROJECT_SERVICE_URL: http://project-service:8000
     ports:
       - "8000:8000"
     depends_on:
       auth-service:
         condition: service_healthy
       user-service:
+        condition: service_healthy
+      project-service:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
@@ -71,7 +74,21 @@ services:
       retries: 5
 
 
+  project-service:
+    build: ./services/project-service
+    environment:
+      DATABASE_URL: sqlite:////app/data/projects.db
+    volumes:
+      - projects_data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
 volumes:
   postgres_data:
   auth_data:
   users_data:
+  projects_data:
